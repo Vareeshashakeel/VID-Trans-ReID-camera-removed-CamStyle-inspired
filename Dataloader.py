@@ -1,4 +1,3 @@
-
 import random
 import numpy as np
 from PIL import Image, ImageFile
@@ -31,7 +30,7 @@ class TrackletCamStyleAugment:
     Input tensor is expected to be normalized to [-1, 1].
     """
 
-    def __init__(self, probability=0.5, strength=0.18, noise_std=0.01):
+    def __init__(self, probability=0.30, strength=0.10, noise_std=0.01):
         self.probability = float(probability)
         self.strength = float(strength)
         self.noise_std = float(noise_std)
@@ -111,8 +110,8 @@ def dataloader(
     num_workers=4,
     seq_len=4,
     use_camstyle_aug=True,
-    camstyle_prob=0.5,
-    camstyle_strength=0.18,
+    camstyle_prob=0.30,
+    camstyle_strength=0.10,
 ):
     train_transforms = T.Compose([
         T.Resize([256, 128], interpolation=3),
@@ -130,7 +129,10 @@ def dataloader(
     ])
 
     dataset = __factory[Dataset_name]()
-    camstyle_aug = TrackletCamStyleAugment(probability=camstyle_prob, strength=camstyle_strength) if use_camstyle_aug else None
+    camstyle_aug = TrackletCamStyleAugment(
+        probability=camstyle_prob,
+        strength=camstyle_strength
+    ) if use_camstyle_aug else None
 
     train_set = VideoDataset_inderase(
         dataset.train,
